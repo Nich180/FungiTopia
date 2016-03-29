@@ -1,0 +1,33 @@
+using UnityEngine;
+using System.Collections;
+
+public class PlayerCast_v2 : MonoBehaviour {
+
+    //Second Player Script that coverts the starting Marker and Points
+
+    public GameObject BlueMarker; //Blue Marker is the origin point
+    public bool BlueMarkerSpawned = false; //Blue Marker does NOT spawn on void start, rather instantiated.
+
+    float w = 185; //Width of GUI.Box
+    float h = 30; //Height of GUI.Box
+
+    public float NitroAmount = 0; //Nitro Rescourses
+    public float PhosphAmount = 0; //Phos Rescourses
+    public float CarbAmount = 0; //Carb Rescourses
+
+    void OnMouseDown()
+    {
+        if (!BlueMarkerSpawned) { //The Blue Marker is the origin point where the Roots of the Fungus come from
+            Instantiate(Resources.Load("BlueMarker", typeof(GameObject)), transform.localPosition, Quaternion.identity); //Spawn 
+            BlueMarker = GameObject.FindGameObjectWithTag("BlueMarker"); //Tag Finder
+            BlueMarkerSpawned = true; } //Preventing this void from repeating
+    }
+
+    void OnGUI() //Placeholder GUI box on player script
+    {
+        GUI.Box(new Rect(220, 10, w, h), "Nitrogen: "+NitroAmount);
+        GUI.Box(new Rect(430, 10, w, h), "Phosphorus: "+PhosphAmount);
+        GUI.Box(new Rect(10, 10, w, h), "Carbohydrates: "+CarbAmount);
+    }
+
+}
