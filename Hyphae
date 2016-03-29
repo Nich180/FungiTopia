@@ -1,0 +1,64 @@
+using UnityEngine;
+using System.Collections;
+
+public class PlyrHyper : MonoBehaviour {
+
+    public GameObject GreenMarker;
+    public GameObject BlueMarker;
+
+    public bool ReachedGreenMarker = false;
+
+
+    public float ExpTimer = 0f;
+    public bool MineExpBool = false;
+
+    public GameObject Clock;
+
+    private float TravelSpeed = 0.1f;
+	
+	// Update is called once per frame
+	void Update () {
+
+        GreenMarker = GameObject.FindGameObjectWithTag("GreenMarker"); //Where to go
+        BlueMarker = GameObject.FindGameObjectWithTag("BlueMarker"); //Where to spawn from
+
+        TravelSpeed += 0.1f * Time.deltaTime; //Travel Speed
+
+        if (!ReachedGreenMarker) {
+        transform.position = Vector2.Lerp(new Vector2(BlueMarker.transform.position.x, BlueMarker.transform.position.y), new Vector2(GreenMarker.transform.position.x, GreenMarker.transform.position.y), TravelSpeed);
+        }
+
+        if (ReachedGreenMarker)
+        {
+            LevelUp();
+          
+
+            if (MineExpBool) //A little reset timer for exp gains
+            {
+             ExpTimer += Time.deltaTime;
+             if (ExpTimer >= 5) { print("Leveled Up"); MineExpBool = false; }
+            }
+        }
+    }
+
+
+    void LevelUp()//Level up reset timer, as well gives a value for exp
+    {
+        if (!MineExpBool)
+        {
+            ExpTimer = 0;
+            MineExpBool = true;
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D GreenMarker)//To Spawn the Clock for visual indication of exp gain
+    {
+        if(GreenMarker.gameObject.CompareTag("GreenMarker")) { ReachedGreenMarker = true; ClockSpawn(); }
+    }
+
+    void ClockSpawn()//Clock visually shows the timer for when you gain Exp
+    {
+        Instantiate(Clock, transform.localPosition, Quaternion.identity);
+    }
+
+}
