@@ -1,0 +1,76 @@
+using UnityEngine;
+using System.Collections;
+
+public class Target : MonoBehaviour {
+
+    public GameObject PlayerHyphae;
+    public GameObject GreenMarker;
+    public GameObject BlueMarker;
+
+    public PlayerCast_v2 PlayCast2;
+    
+    public scriptHolder Scripter;
+    public GameObject GameManager;
+
+    public bool PlayerHypHasSpwaned;
+    bool GreenMarkerPlaced = false;
+
+    void Start() {
+
+        PlayCast2 = PlayCast2.GetComponent<PlayerCast_v2>();
+
+        GameManager = GameObject.FindGameObjectWithTag("GameManager");
+        //PlayerObj = GameObject.FindGameObjectWithTag("Player");
+        Scripter = Scripter.GetComponent<scriptHolder>();
+        PlayerHypHasSpwaned = false;
+    }
+
+    void FixedUpdate()
+    {
+
+        if (GreenMarker = GameObject.FindGameObjectWithTag("GreenMarker")) { GreenMarkerPlaced = true; } //Minerals will be spawned on Random, needing to search for the GreenMarker
+        PlyHyperSummoner(); //This void spawns a root from the Blue Marker heading towards the Green Marker 
+        
+    }
+
+    void OnMouseDown() //Selecting a MineralTarget for the first time one which ever mineral cause the green marker to spawn if not summoned
+    {
+
+        
+
+        if (!GreenMarkerPlaced)//Only need to do this once to summon the GREENMARKER
+        { Instantiate(Resources.Load("GreenMarker", typeof(GameObject)), new Vector3(transform.position.x, transform.position.y, 0), Quaternion.identity);
+            GreenMarker = GameObject.FindGameObjectWithTag("GreenMarker");
+        }
+
+        if (PlayCast2) { BlueMarker = GameObject.FindGameObjectWithTag("BlueMarker"); }
+
+            if (GreenMarkerPlaced) { GreenMarker.transform.position = transform.position; GetComponent<SpriteRenderer>().color = Color.green;  }
+            
+    }
+
+    void PlyHyperSummoner() //This void spawns a root from the Blue Marker heading towards the Green Marker 
+    {
+        if (GreenMarkerPlaced)
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha1) && PlayCast2)
+            {
+                PlayerHypHasSpwaned = true;
+                Instantiate(Resources.Load("PlyrHyph", typeof(GameObject)), new Vector2(BlueMarker.transform.position.x, BlueMarker.transform.position.y), Quaternion.identity);
+                PlayerHyphae = GameObject.FindGameObjectWithTag("PlayerHyphae");
+                GreenMarkerPlaced = false;
+            }
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D GreenMarker) //If Green Marker colliders with a MineralTarget, component changes colour to indicate that its been selected
+    {
+        if (GreenMarker.gameObject.CompareTag("GreenMarker")) { GreenMarker.GetComponent<SpriteRenderer>().color = Color.green; }
+    }
+
+    void OnTriggerExit2D(Collider2D GreenMarker)
+    {
+        if (GreenMarker.gameObject.CompareTag("GreenMarker")) { GetComponent<SpriteRenderer>().color = Color.white; }
+    }
+
+}
